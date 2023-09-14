@@ -1,0 +1,42 @@
+useEffect(() => {
+        if (data && counterSequence >= 0 && counterSequence <= list.length && isFirstClick) {
+            if (counterSequence < list.length) {
+                const word = list[counterSequence];
+                if (voice) {
+                    // Speak Word
+                    const utterance = new SpeechSynthesisUtterance(word);
+                    window.utterance = utterance;
+                    utterance.voice = voice;
+                    synth.speak(utterance);
+                    utterance.onend = (event: SpeechSynthesisEvent) => {
+                        const timeout = setTimeout(() => {
+                            showNextSerie();
+                            clearTimeout(timeout);
+                        }, data.options.temps * 1000);
+                    };
+                } else {
+                    const timeout = setTimeout(() => {
+                        showNextSerie();
+                        clearTimeout(timeout);
+                    }, data.options.temps * 1000);
+                }
+            } else {
+                if (voice) {
+                    const utterance = new SpeechSynthesisUtterance("fin");
+                    utterance.voice = voice;
+                    synth.speak(utterance);
+                }
+                setShowInput(true);
+            }
+        }
+    }, [counterSequence, data, isFirstClick]);
+
+
+
+
+
+Nouveau
+17 h 14
+const showNextSerie = () => {
+        setCounterSequence((prev: number) => ++prev);
+    };
